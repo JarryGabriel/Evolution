@@ -19,8 +19,7 @@ public class Animal extends LifeBeing {
 
 	@Override
 	void next() {
-		this.life = Math.max(0, this.life - 1);
-
+		this.life -= 0.25;
 	}
 
 }

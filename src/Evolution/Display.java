@@ -10,6 +10,9 @@ public class Display {
 	}
 	
 	private Color colorN(int n) {
+		if (n==-1) {
+			return Color.white;
+		}
 		if (n==0) {
 			return Color.green;
 		}

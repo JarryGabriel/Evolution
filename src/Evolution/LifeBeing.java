@@ -8,7 +8,7 @@ abstract class LifeBeing {
 	
 
 	public boolean isAlive() {
-		return (this.life <= 0);
+		return (this.life >= 0);
 	}
 	
 	public ArrayList<int[]> getNeighbors(int size){
@@ -42,7 +42,9 @@ abstract class LifeBeing {
 		return neighbors;
 	}
 	
-	
+	public void die(){
+		this.life = 0;
+	}
 	
 	abstract void next();
 

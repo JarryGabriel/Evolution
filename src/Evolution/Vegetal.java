@@ -12,8 +12,7 @@ public class Vegetal extends LifeBeing{
 
 	@Override
 	void next() {
-		// test si les voisins etc...
-
+		this.life -= 0.005;
 	}
 
 
