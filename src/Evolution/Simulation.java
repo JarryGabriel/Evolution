@@ -18,7 +18,7 @@ public class Simulation{
 			pos[1] = gen.nextInt(this.size);
 			if (!positions.contains(pos)) {
 				positions.add(pos);
-				this.vegetals.add(new Vegetal(pos[0],pos[1]));
+				this.vegetals.add(new Vegetal(pos[0],pos[1],gen.nextDouble()+1));
 			}
 		}
 		while (positions.size() - numberVegetals < numberHerbivores) {
@@ -81,6 +81,8 @@ public class Simulation{
 		
 	}
 	
+	
+	
 	private ArrayList<ArrayList<int[]>> composition(ArrayList<int[]> neighbors){
 		ArrayList<ArrayList<int[]>> composition = new ArrayList<ArrayList<int[]>>();
 		ArrayList<int[]> positions = this.getPositions();
@@ -134,7 +136,7 @@ public class Simulation{
 	private ArrayList<Integer> possibilities(ArrayList<ArrayList<int[]>> composition){
 		ArrayList<Integer> possibilities = new ArrayList<Integer>();
 		ArrayList<int[]> empty = composition.get(0);
-		ArrayList<int[]> fullHerbivore = composition.get(1); 
+		ArrayList<int[]> fullHerbivore = composition.get(2); 
 		ArrayList<int[]> fullVegetal = composition.get(1); 
 		if (empty.size()>=1){
 			possibilities.add(0);
@@ -157,7 +159,7 @@ public class Simulation{
 				newVegetals.add(current);
 			}
 			else{
-				System.out.println("Vegetal "+i+" dies");
+				//System.out.println("Vegetal "+i+" dies");
 				this.display.draw(current.getX(), current.getY(), -1);
 			}
 		}
@@ -170,11 +172,32 @@ public class Simulation{
 				newHerbivores.add(current);
 			}
 			else{
-				System.out.println("Herbivore "+i+" dies");
+				//System.out.println("Herbivore "+i+" dies");
 				this.display.draw(current.getX(), current.getY(), -1);
 			}
 		}
 		this.herbivores = newHerbivores;
+	}
+	
+	private int probability(ArrayList<Integer> possibilities){
+		int value =-1;
+		boolean reproduction = false;
+		if (possibilities.size() == 1 && possibilities.contains(1)){
+			reproduction = true;
+		}
+		do {
+			double r1 = gen.nextDouble();
+			if (r1 <= 0.5){
+				value = 0;
+			}
+			else if (r1 <= 1-0.27/this.herbivores.size()){
+				value = 2;
+			}
+			else {
+				value = 1;
+			}
+		}while (!possibilities.contains(value) || reproduction);
+		return value;
 	}
 	
 	public void step(){
@@ -187,10 +210,10 @@ public class Simulation{
 			int n = empty.size();
 			if (n >= 1){
 				double r1 = gen.nextDouble();
-				if (r1 <= 1./vegetals.size()){
+				if (r1 <= 5./(1*vegetals.size())){
 					int r2 = gen.nextInt(n);
 					int[] pos = empty.get(r2);
-					Vegetal vegetal = new Vegetal(pos[0],pos[1]);
+					Vegetal vegetal = new Vegetal(pos[0],pos[1],gen.nextDouble()+1);
 					this.vegetals.add(vegetal);
 					//System.out.println("Vegetal "+i+" reproduces, life "+current.life);
 					
@@ -207,9 +230,9 @@ public class Simulation{
 			if (!done.contains(i) && current.isAlive()){
 				ArrayList<ArrayList<int[]>> composition = this.composition(current.getNeighbors(this.size));
 				ArrayList<Integer> possibilities = this.possibilities(composition);
+				
 				if (possibilities.size()>= 1){
-					r1 = gen.nextInt(possibilities.size());
-					index = possibilities.get(r1);
+					index = this.probability(possibilities);
 					if (index == 0){
 						ArrayList<int[]> empty = composition.get(0);
 						r2 = gen.nextInt(empty.size());
@@ -219,10 +242,13 @@ public class Simulation{
 						//System.out.println("Herbivore "+i+" moves, life "+current.life);
 					}
 					if (index == 1){
-						ArrayList<int[]> fullHerbivores = composition.get(1);
+						current.reproduce();
+						ArrayList<int[]> fullHerbivores = composition.get(2);
 						ArrayList<int[]> empty = composition.get(0);
 						r2 = gen.nextInt(fullHerbivores.size());
 						pos = fullHerbivores.get(r2);
+						Herbivore other = this.herbivores.get(pos[2]);
+						other.reproduce();
 						done.add(pos[2]);
 						r2 = gen.nextInt(empty.size());
 						pos = empty.get(r2);
@@ -236,7 +262,7 @@ public class Simulation{
 						pos = fullVegetal.get(r2);
 						Vegetal vegetal = this.vegetals.get(pos[2]-this.herbivores.size());
 						current.eat(vegetal);
-						System.out.println("Herbivore "+i+" eats, life "+current.life);
+						//System.out.println("Herbivore "+i+" eats, life "+current.life);
 					}
 				}
 			}

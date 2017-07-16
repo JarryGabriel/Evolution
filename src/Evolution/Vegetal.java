@@ -1,10 +1,10 @@
 package Evolution;
 public class Vegetal extends LifeBeing{
 	
-	public Vegetal(int x, int y) {
+	public Vegetal(int x, int y, double life) {
 		super();
-		this.life = 1;
-		this.lifeMax = 1;
+		this.life = life;
+		this.lifeMax = life;
 		this.x = x;
 		this.y = y;
 	}
@@ -12,7 +12,7 @@ public class Vegetal extends LifeBeing{
 
 	@Override
 	void next() {
-		this.life -= 0.005;
+		this.life -= 0.0001;
 	}
 
 

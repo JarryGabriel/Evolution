@@ -8,7 +8,7 @@ public class Herbivore extends Animal implements EatVegetals {
 	@Override
 	public void eat(Vegetal vegetal) {
 		vegetal.die();
-		this.life = Math.min(this.lifeMax, this.life+3);
+		this.life = Math.min(this.lifeMax, this.life+1);
 
 	}
 	

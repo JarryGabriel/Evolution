@@ -16,10 +16,12 @@ public class Animal extends LifeBeing {
  
 	}
 	
+	public void reproduce(){
+	}
 
 	@Override
 	void next() {
-		this.life -= 0.25;
+		this.life -= 0.075;
 	}
 
 }
