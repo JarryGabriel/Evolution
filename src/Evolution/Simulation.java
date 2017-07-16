@@ -210,7 +210,7 @@ public class Simulation{
 			int n = empty.size();
 			if (n >= 1){
 				double r1 = gen.nextDouble();
-				if (r1 <= 5./(1*vegetals.size())){
+				if (r1 <= 10./(1*vegetals.size())){
 					int r2 = gen.nextInt(n);
 					int[] pos = empty.get(r2);
 					Vegetal vegetal = new Vegetal(pos[0],pos[1],gen.nextDouble()+1);
