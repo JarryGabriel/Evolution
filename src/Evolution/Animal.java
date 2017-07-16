@@ -21,7 +21,7 @@ public class Animal extends LifeBeing {
 
 	@Override
 	void next() {
-		this.life -= 0.075;
+		this.life -= 0.05;
 	}
 
 }
